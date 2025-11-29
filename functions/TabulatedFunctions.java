@@ -40,7 +40,7 @@ public class TabulatedFunctions {
     }
 
     // Чтение из байтового потока
-    public static TabulatedFunction inputTabulatedFunction(InputStream in) throws IOException {
+    public static TabulatedFunction inputTabulatedFunction(Class<? extends TabulatedFunction> functionClass, InputStream in) throws IOException {
         DataInputStream dataIn = new DataInputStream(in);
 
         int pointsCount = dataIn.readInt();
@@ -52,7 +52,7 @@ public class TabulatedFunctions {
             points[i] = new FunctionPoint(x, y);
         }
 
-        return createTabulatedFunction(points);
+        return createTabulatedFunction(functionClass, points);
     }
 
     // Запись в текстовый поток
@@ -68,7 +68,7 @@ public class TabulatedFunctions {
     }
 
     // Чтение из текстового потока
-    public static TabulatedFunction readTabulatedFunction(Reader in) throws IOException {
+    public static TabulatedFunction readTabulatedFunction(Class<? extends TabulatedFunction> functionClass, Reader in) throws IOException {
         StreamTokenizer tok = new StreamTokenizer(in);
         // Читаем количество точек
         tok.nextToken();
@@ -83,7 +83,7 @@ public class TabulatedFunctions {
             points[i] = new FunctionPoint(x, y);
         }
 
-        return createTabulatedFunction(points);
+        return createTabulatedFunction(functionClass, points);
     }
     private static TabulatedFunctionFactory factory = new ArrayTabulatedFunction.ArrayTabulatedFunctionFactory(); //Приватное статическое поле фабрики
 
