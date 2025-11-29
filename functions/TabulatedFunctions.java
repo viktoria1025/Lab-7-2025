@@ -40,6 +40,21 @@ public class TabulatedFunctions {
     }
 
     // Чтение из байтового потока
+    public static TabulatedFunction inputTabulatedFunction(InputStream in) throws IOException {
+        DataInputStream dataIn = new DataInputStream(in);
+
+        int pointsCount = dataIn.readInt();
+
+        FunctionPoint[] points = new FunctionPoint[pointsCount];
+        for (int i = 0; i < pointsCount; i++) {
+            double x = dataIn.readDouble();
+            double y = dataIn.readDouble();
+            points[i] = new FunctionPoint(x, y);
+        }
+
+        return createTabulatedFunction(points);
+    }
+    // Чтение из байтового потока (перегруженный)
     public static TabulatedFunction inputTabulatedFunction(Class<? extends TabulatedFunction> functionClass, InputStream in) throws IOException {
         DataInputStream dataIn = new DataInputStream(in);
 
@@ -68,6 +83,24 @@ public class TabulatedFunctions {
     }
 
     // Чтение из текстового потока
+    public static TabulatedFunction readTabulatedFunction(Reader in) throws IOException {
+        StreamTokenizer tok = new StreamTokenizer(in);
+        // Читаем количество точек
+        tok.nextToken();
+        int pointsCount = (int) tok.nval;
+        // Читаем координаты точек
+        FunctionPoint[] points = new FunctionPoint[pointsCount];
+        for (int i = 0; i < pointsCount; i++) {
+            tok.nextToken();
+            double x = tok.nval;
+            tok.nextToken();
+            double y = tok.nval;
+            points[i] = new FunctionPoint(x, y);
+        }
+
+        return createTabulatedFunction(points);
+    }
+    // Чтение из текстового потока (перегруженный)
     public static TabulatedFunction readTabulatedFunction(Class<? extends TabulatedFunction> functionClass, Reader in) throws IOException {
         StreamTokenizer tok = new StreamTokenizer(in);
         // Читаем количество точек
